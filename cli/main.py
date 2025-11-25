@@ -305,5 +305,8 @@ def tools_explain(cmd: str):
     print(text)
 
 
+def main():
+    app()
+
 if __name__ == "__main__":
     app()
