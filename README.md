@@ -1,12 +1,7 @@
-Here’s your **updated README.md** with a comprehensive Markdown table summarizing all commands added, combined into your existing content:
+# Generative Shell-composer (Gensh)
 
----
 
-# Gensh
-
-```markdown
-**Gensh** is a natural-language to shell command converter CLI tool. It allows you to type instructions in plain English, and it generates OS-specific shell commands safely. It also includes diagnostic tools, command explanation, history tracking, and configuration management.
-```
+* A natural-language to shell command converter CLI tool. It allows you to type instructions in plain English, and it generates OS-specific shell commands safely. It also includes diagnostic tools, command explanation, history tracking, and configuration management.
 
 ---
 
