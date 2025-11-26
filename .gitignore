@@ -21,6 +21,8 @@ VENV/
 envs/
 virtualenv/
 .virtualenv/
+gsh-test-env/
+
 config/settings.json
 .DS_Store
 node_modules/
