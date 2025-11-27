@@ -28,20 +28,20 @@ def create_app():
     app.add_typer(config_app, name="config")    
 
     # --------------------------
-    # Subgroup: gsh history ...
+    # Subgroup: flyn history ...
     # --------------------------
     history_app = typer.Typer(help="View or manage command history")
     app.add_typer(history_app, name="history")  
 
     # --------------------------
-    # Subgroup: gsh os ...
+    # Subgroup: flyn os ...
     # --------------------------
     os_app = typer.Typer(help="Quick OS selection")
     app.add_typer(os_app, name="os")    
 
 
     # =====================================================================
-    # MAIN COMMAND: gsh run "<instruction>"
+    # MAIN COMMAND: flyn run "<instruction>"
     # =====================================================================
     @app.command()
     def run(
@@ -74,11 +74,11 @@ def create_app():
     @app.command("version")
     def show_version():
         """
-        Show the current gsh version.
+        Show the current flyn version.
         """
         try:
-            pkg_version = version("gsh")  # Use your actual package name
-            print(f"[bold cyan]gsh version:[/bold cyan] {pkg_version}")
+            pkg_version = version("flyn")  # Use your actual package name
+            print(f"[bold cyan]flyn version:[/bold cyan] {pkg_version}")
         except PackageNotFoundError:
             # fallback if running from local source - try reading pyproject.toml
             pkg_version = "unknown"
@@ -97,7 +97,7 @@ def create_app():
             except Exception:
                 pass
 
-            print(f"[bold cyan]gsh version:[/bold cyan] {pkg_version}")
+            print(f"[bold cyan]flyn version:[/bold cyan] {pkg_version}")
 
 
     # =====================================================================
@@ -179,7 +179,7 @@ def create_app():
         print(f"[bold green]OS set to {os_name}[/bold green]")  
 
 
-    # Convenience commands: gsh os windows / linux / mac
+    # Convenience commands: flyn os windows / linux / mac
     @os_app.command("windows")
     def os_windows():
         os_set("windows")   
@@ -199,7 +199,7 @@ def create_app():
     # history subgroup
     # ===================================================================== 
 
-    HISTORY_FILE = os.path.expanduser("~/.gsh-history.json") 
+    HISTORY_FILE = os.path.expanduser("~/.flyn-history.json") 
 
     @history_app.command("show")
     def history_show():
@@ -238,16 +238,16 @@ def create_app():
     app.add_typer(tools_app, name="tools")  
 
     # --------------------------------------------------------------
-    #  gsh tools diagnose
+    #  flyn tools diagnose
     # --------------------------------------------------------------
     @tools_app.command("diagnose")
     def tools_diagnose():
         """
-        Diagnose gsh configuration and API connectivity.
+        Diagnose flyn configuration and API connectivity.
         """ 
 
         config = load_config()
-        print("[bold cyan]gsh Diagnostics[/bold cyan]")
+        print("[bold cyan]flyn Diagnostics[/bold cyan]")
         # 1. Check config keys
         print("\n[green]✔ Loaded configuration[/green]")
         for k, v in config.items():
@@ -274,7 +274,7 @@ def create_app():
 
 
     # --------------------------------------------------------------
-    #  gsh tools models
+    #  flyn tools models
     # --------------------------------------------------------------
     @tools_app.command("models")
     def tools_models():
@@ -285,7 +285,7 @@ def create_app():
         api_key = config.get("api_key") or config.get("key") 
 
         if not api_key:
-            print("[red]Missing API key. Configure using gsh config set api_key <key>[/red]")
+            print("[red]Missing API key. Configure using flyn config set api_key <key>[/red]")
             raise typer.Exit()  
 
         import google.generativeai as genai 
@@ -303,7 +303,7 @@ def create_app():
 
 
     # --------------------------------------------------------------
-    # gsh tools explain "<command>"
+    # flyn tools explain "<command>"
     # --------------------------------------------------------------
     @tools_app.command("explain")
     def tools_explain(cmd: str):

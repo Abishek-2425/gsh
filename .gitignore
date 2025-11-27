@@ -23,7 +23,7 @@ VENV/
 envs/
 virtualenv/
 .virtualenv/
-gsh-test-env/
+flyn-test-env/
 
 config/settings.json
 .DS_Store
