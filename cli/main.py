@@ -1,11 +1,11 @@
 import typer
 from rich import print
 
-from core.generator import generate_command
-from core.safety import analyze_risk
-from core.executor import execute_command
-from core.history import save_history
-from core.config_loader import load_config, update_config, DEFAULT_CONFIG
+from flyn.core.generator import generate_command
+from flyn.core.safety import analyze_risk
+from flyn.core.executor import execute_command
+from flyn.core.history import save_history
+from flyn.core.config_loader import load_config, update_config, DEFAULT_CONFIG
 
 try:
     from importlib.metadata import version, PackageNotFoundError
@@ -155,7 +155,7 @@ def create_app():
         """
         Reset the configuration to default values.
         """
-        from core.config_loader import CONFIG_PATH  
+        from flyn.core.config_loader import CONFIG_PATH  
 
         with open(CONFIG_PATH, "w") as f:
             json.dump(DEFAULT_CONFIG, f, indent=2)  
@@ -321,7 +321,7 @@ def create_app():
         import google.generativeai as genai 
 
         # Build reverse prompt
-        from core.prompts import build_explain_prompt   
+        from flyn.core.prompts import build_explain_prompt   
 
         prompt = build_explain_prompt(cmd)  
 

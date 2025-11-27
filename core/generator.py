@@ -1,5 +1,5 @@
 import google.generativeai as genai
-from core.prompts import build_prompt
+from flyn.core.prompts import build_prompt
 
 def generate_command(user_input, config):
     api_key = config.get("api_key") or config.get("gemini_api_key")
