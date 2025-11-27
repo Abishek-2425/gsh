@@ -31,4 +31,4 @@ where = ["."]
 include = ["cli", "cli.*", "core", "core.*"]
 
 [project.scripts]
-gsh = "cli.main:main"
+qwe = "cli.main:main"
