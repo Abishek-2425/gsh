@@ -7,7 +7,7 @@ name = "qwe-testing"
 version = "0.1.1"
 description = "Natural-language to shell command converter Grok API"
 readme = { file = "README.md", content-type = "text/markdown" }
-authors = [{ name = "Abishek S", email = "your-email@example.com" }]
+authors = [{ name = "Abishek S", email = "abishek642005@gmail.com" }]
 requires-python = ">=3.10"
 dependencies = [
     "typer>=0.9.0",
