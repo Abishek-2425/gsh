@@ -15,7 +15,7 @@ def analyze_risk(cmd: str):
         if d in lower:
             return "HIGH"
 
-    if "rm" in lower:
-        return "MEDIUM"
+        if "rm" in lower:
+            return "MEDIUM"
 
     return "LOW"
