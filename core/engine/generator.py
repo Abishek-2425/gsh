@@ -1,52 +1,45 @@
-import google.generativeai as genai
-from flyn.core.prompts import build_prompt
+"""
+generator.py
+High-level pipeline: select backend -> generate -> parse -> validate -> return structured result
+"""
 
-def generate_command(user_input, config):
-    api_key = config.get("key")
-    model_name = config.get("model", "gemini-2.0-flash")
-    os_name = config.get("os", "windows").lower()
-    temp = config.get("temp", 0.4)
+from __future__ import annotations
+from typing import Dict, Any, Optional
+from flyn.config.loader import get_config
+from flyn.core.parser import parse_command_from_model, extract_json_like
+from flyn.core.validator import validate_generated
+from flyn.core.generation_backends.google_genai import GoogleGenAIBackend
+from flyn.core.generation_backends.base import GenerationBackend
 
-    if not api_key:
-        return {
-            "command": "",
-            "explanation": "Missing Gemini API key"
+# Map provider names to backend classes (add more providers here)
+_BACKEND_REGISTRY: dict[str, type[GenerationBackend]] = {
+    "google": GoogleGenAIBackend,
+}
+
+def _choose_backend(name: str | None = None) -> GenerationBackend:
+    cfg = get_config()
+    provider = name or cfg.get("backend.provider", "google")
+    cls = _BACKEND_REGISTRY.get(provider)
+    if cls is None:
+        # fallback to google placeholder
+        cls = GoogleGenAIBackend
+    return cls()
+
+def generate_structured(instruction: str, backend_name: Optional[str] = None) -> Dict[str, Any]:
+    backend = _choose_backend(backend_name)
+    raw = backend.generate(instruction)
+    # parse out JSON if possible
+    parsed_json = extract_json_like(raw)
+    if parsed_json is None:
+        # try to extract a heuristic command and wrap into minimal JSON
+        cmd = parse_command_from_model(raw)
+        parsed_json = {
+            "command": cmd or "",
+            "explanation": "Parsed heuristically from model output",
+            "confidence": 0.0,
+            "risk_tags": []
         }
-
-    # Configure Gemini
-    try:
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel(model_name)
-    except Exception as e:
-        return {"command": "", "explanation": f"Gemini init error: {e}"}
-
-    # Build prompt with OS conditioning
-    prompt = build_prompt(
-        instruction=user_input,
-        os_name=os_name
-    )
-
-    try:
-        response = model.generate_content(
-            prompt,
-            generation_config={"temp": temp}
-        )
-        text = (response.text or "").strip()
-    except Exception as e:
-        return {"command": "", "explanation": f"Gemini error: {e}"}
-
-    # --- Output parsing ---
-    command = ""
-    explanation = ""
-
-    for raw in text.splitlines():
-        line = raw.strip()
-        if line.lower().startswith("command:"):
-            command = line.split(":", 1)[1].strip()
-        elif line.lower().startswith("explanation:"):
-            explanation = line.split(":", 1)[1].strip()
-
-    return {
-        "command": command,
-        "explanation": explanation
-    }
+    validated = validate_generated(parsed_json)
+    # include raw model output for debugging
+    validated["model_raw"] = raw
+    return validated

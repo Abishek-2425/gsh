@@ -1,0 +1,16 @@
+# defaults.toml - default configuration for flyn v2.0
+[general]
+safe_mode = true
+dry_run_default = true
+confirm_on_danger = true
+history_file = "~/.local/share/flyn/history.log"
+safe_workdir = "~/.local/share/flyn/sandbox"
+
+[backend]
+provider = "google"
+google_api_key = ""
+
+[safety]
+blacklist = ["rm", "dd", "mkfs", ">:","chmod 777", "chown 0:0"]
+max_timeout_seconds = 30
+min_confidence_to_auto_run = 0.9
