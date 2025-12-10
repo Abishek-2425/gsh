@@ -5,7 +5,7 @@ High-level pipeline: select backend -> generate -> parse -> validate -> return s
 
 from __future__ import annotations
 from typing import Dict, Any, Optional
-from flyn.config import loader
+from flyn.config.loader import get_config
 from flyn.core.parser import parse_command_from_model, extract_json_like
 from flyn.core.validator import validate_generated
 from flyn.core.generation_backends.google_genai import GoogleGenAIBackend
@@ -17,7 +17,7 @@ _BACKEND_REGISTRY: dict[str, type[GenerationBackend]] = {
 }
 
 def _choose_backend(name: str | None = None) -> GenerationBackend:
-    cfg = loader.get_config()
+    cfg = get_config()
     provider = name or cfg.get("backend.provider", "google")
     cls = _BACKEND_REGISTRY.get(provider)
     if cls is None:
